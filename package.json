@@ -4,6 +4,7 @@
   "description": "Servidor Icem",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",

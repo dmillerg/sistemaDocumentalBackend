@@ -13,10 +13,10 @@ var login_controller = require('../controllers/login');
 var api = express.Router();
 
 // Rutas para las api de usuario
-api.post('/saveUsuario', usuario_controller.saveUsuario);
+api.post('/usuarios', usuario_controller.saveUsuario);
 api.get('/usuarios/:limit', usuario_controller.getUsuarios);
 api.get('/usuario/:id', usuario_controller.getUsuario);
-api.post('/usuarios/:id', usuario_controller.updateUsuario);
+api.put('/usuarios/:id', usuario_controller.updateUsuario);
 api.delete('/deleteUsuario/:id', usuario_controller.deleteUsuario);
 
 // Rutas para login and logout

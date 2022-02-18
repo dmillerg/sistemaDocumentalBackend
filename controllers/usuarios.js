@@ -1,48 +1,48 @@
 const conexion = require("../database/database");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 
 function saveUsuario(req, res) {
-  conexion.all(
-    `SELECT * FROM tokens WHERE token='${req.body.token}'`,
-    function (err, result) {
-      if (err) {
-        return res.status(405).send({ message: "usuario no autenticado" });
-      }
-      if (result.length > 0) {
-        // Recogemos los parametros del body
-        var id = -1;
-        var body = req.body;
-        var usuario = body.usuario;
-        var password = body.password;
-        var nombre = body.nombre;
-        var rol = body.rol;
-        let date = new Date();
-        
-        bcrypt.hash(password, 10, (err, encrypted) => {
-          if (err) {
-            console.log(err);
+  // conexion.all(
+  //   `SELECT * FROM tokens WHERE token='${req.body.token}'`,
+  //   function (err, result) {
+  //     if (err) {
+  //       return res.status(405).send({ message: "usuario no autenticado" });
+  //     }
+  //     if (result.length > 0) {
+  // Recogemos los parametros del body
+  var id = -1;
+  var body = req.body;
+  var usuario = body.usuario;
+  var password = body.password;
+  var nombre = body.nombre;
+  var rol = body.rol;
+  let date = new Date();
+
+  bcrypt.hash(password, 10, (err, encrypted) => {
+    if (err) {
+      console.log(err);
+    } else {
+      conexion.all(
+        `INSERT INTO usuarios(id, usuario, password, nombre, fecha_registro, fecha_ultima_sesion, rol) VALUES (NULL,"${usuario}","${encrypted}","${nombre}","${date}","${date}","${rol}")`,
+        function (error, results, fields) {
+          if (error) return res.status(500).send({ message: error });
+          if (results) {
+            return res
+              .status(201)
+              .send({ message: "agregado correctamente" });
           } else {
-            conexion.all(
-              `INSERT INTO usuarios(id, usuario, password, nombre, fecha_registro, fecha_ultima_sesion, rol) VALUES (NULL,"${usuario}","${encrypted}","${nombre}","${date}","${date}","${rol}")`,
-              function (error, results, fields) {
-                if (error) return res.status(500).send({ message: error });
-                if (results) {
-                  return res
-                    .status(201)
-                    .send({ message: "agregado correctamente" });
-                } else {
-                  return res
-                    .status(400)
-                    .send({ message: "Datos mal insertados" });
-                }
-              }
-            );
+            return res
+              .status(400)
+              .send({ message: "Datos mal insertados" });
           }
-        });
-      }
+        }
+      );
     }
-  );
+  });
+  //     }
+  //   }
+  // );
 }
 
 function getUsuarios(req, res) {
