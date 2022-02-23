@@ -1,11 +1,12 @@
 const { query } = require("../database/database");
 const conexion = require("../database/database");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 
 function login(req, res) {
   var body = req.body;
   var usuario = body.usuario;
   var password = body.password;
+  console.log(body);
   let query = `SELECT * FROM usuarios WHERE usuario="${usuario}"`;
   let date = new Date();
   conexion.all(query, function (error, result, field) {
