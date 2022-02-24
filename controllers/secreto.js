@@ -54,10 +54,8 @@ function getSecretos(req, res) {
   }
   conexion.all(query, function (error, results, fields) {
     if (error) return res.status(500).send({ message: "Error en el servidor" });
-    if (results.length > 0) {
+    if (results) {
       return res.status(200).json(results);
-    } else {
-      return res.status(200).send({ message: "No hay documentos secretos" });
     }
   });
 }

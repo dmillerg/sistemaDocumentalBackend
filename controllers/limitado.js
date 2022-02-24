@@ -26,6 +26,8 @@ function saveLimitado(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
+        console.log(`INSERT INTO documento_limitado(id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
+        VALUES (NULL,"${no}","${procedencia}","${titulo}","${fecha}","${movimiento1}","${movimiento2}","${destruccion}","${expediente}","${observacion}","${imagen}")`);
         conexion.all(
           `INSERT INTO documento_limitado(id, no, procedencia, enviado, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
          VALUES (NULL,"${no}","${procedencia}","${titulo}","${fecha}","${movimiento1}","${movimiento2}","${destruccion}","${expediente}","${observacion}","${imagen}")`,
@@ -53,10 +55,8 @@ function getLimitados(req, res) {
   }
   conexion.all(query, function (error, results, fields) {
     if (error) return res.status(500).send({ message: "Error en el servidor" });
-    if (results.length > 0) {
+    if (results) {
       return res.status(200).json(results);
-    } else {
-      return res.status(200).send({ message: "No hay documentos limitado" });
     }
   });
 }

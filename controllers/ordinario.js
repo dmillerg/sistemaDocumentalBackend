@@ -5,6 +5,7 @@ const { json } = require("body-parser");
 function saveOrdinario(req, res) {
   var id = -1;
   var body = req.body;
+  console.log(body)
   var no = body.no;
   var fecha = body.fecha;
   var enviado = body.enviado;
@@ -51,10 +52,8 @@ function getOrdinarios(req, res) {
   }
   conexion.all(query, function (error, results, fields) {
     if (error) return res.status(500).send({ message: "Error en el servidor" });
-    if (results.length > 0) {
+    if (results) {
       return res.status(200).json(results);
-    } else {
-      return res.status(200).send({ message: "No hay documentos ordinario" });
     }
   });
 }
