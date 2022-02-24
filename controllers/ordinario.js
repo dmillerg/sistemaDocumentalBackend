@@ -140,7 +140,7 @@ function updateOrdinario(req, res) {
     });
 }
 
-function deleteClasificado(req, res) {
+function deleteOrdinario(req, res) {
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.query.token}'`,
     function (err, result) {
@@ -151,11 +151,11 @@ function deleteClasificado(req, res) {
         var id = req.params.id;
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
-          `SELECT * FROM documento_clasificado WHERE id = ${id}`,
+          `SELECT * FROM documento_ordinario WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
               conexion.all(
-                `DELETE FROM documento_clasificado WHERE id = ${id}`,
+                `DELETE FROM documento_ordinario WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
@@ -167,7 +167,7 @@ function deleteClasificado(req, res) {
                   } else {
                     return res
                       .status(404)
-                      .send({ message: "no existe ningun documento clasificado con ese id" });
+                      .send({ message: "no existe ningun documento ordinario con ese id" });
                   }
                 }
               );
@@ -180,9 +180,9 @@ function deleteClasificado(req, res) {
 }
 
 module.exports = {
-  saveClasificado,
-  getClasificado,
+  saveOrdinario,
+  getOrdinario,
   // getUsuario,
-  updateClasificaod,
-  deleteClasificado,
+  updateOrdinario,
+  deleteOrdinario,
 };

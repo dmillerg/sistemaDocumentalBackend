@@ -2,23 +2,16 @@ const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 
-function saveClasificado(req, res) {
-  console.log(req.body);
+function saveOrdinarioPersonal(req, res) {
   var id = -1;
   var body = req.body;
   var no = body.no;
   var fecha = body.fecha;
-  var enviado = body.enviado;
-  var rsb = body.rsb;
-  var rs = body.rs;
-  var fecha_registro_ctc = body.fecha_registro_ctc;
+  var procedencia = body.procedencia;
   var asunto = body.asunto;
-  var doc = body.doc;
-  var ej = body.ej;
-  var clasif = body.clasif;
   var destino = body.destino;
-  var traslado = body.traslado;
-  var fecha_traslado = body.fecha_traslado;
+  var archivo = body.archivo;
+  var imagen = body.imagen;
   let date = new Date();
 
   conexion.all(
@@ -29,8 +22,8 @@ function saveClasificado(req, res) {
       }
       if (result.length > 0) {
         conexion.all(
-          `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado)
-         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}")`,
+          `INSERT INTO documento_ordinario_personal_personal(id, no, fecha, procedencia, asunto, destino, archivo, imagen)
+         VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen}")`,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
@@ -47,9 +40,9 @@ function saveClasificado(req, res) {
     });
 }
 
-function getClasificado(req, res) {
+function getOrdinarioPersonal(req, res) {
   var limit = req.params.limit;
-  var query = `SELECT * FROM documento_clasificado WHERE 1 `;
+  var query = `SELECT * FROM documento_ordinario_personal_personal WHERE 1 `;
   if (limit > 0) {
     query += ` LIMIT ${limit}`;
   }
@@ -58,7 +51,7 @@ function getClasificado(req, res) {
     if (results.length > 0) {
       return res.status(200).json(results);
     } else {
-      return res.status(200).send({ message: "No hay documentos clasificado" });
+      return res.status(200).send({ message: "No hay documentos ordinario personal" });
     }
   });
 }
@@ -81,8 +74,7 @@ function getClasificado(req, res) {
 //   );
 // }
 
-function updateClasificaod(req, res) {
-  console.log(req.body);
+function updateOrdinarioPersonal(req, res) {
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
     function (err, result) {
@@ -94,34 +86,27 @@ function updateClasificaod(req, res) {
         var id = req.params.id;
 
         // Recogemos los datos que nos llegen en el body de la petición
-        var id = -1;
         var body = req.body;
         var no = body.no;
         var fecha = body.fecha;
-        var enviado = body.enviado;
-        var rsb = body.rsb;
-        var rs = body.rs;
-        var fecha_registro_ctc = body.fecha_registro_ctc;
+        var procedencia = body.procedencia;
         var asunto = body.asunto;
-        var doc = body.doc;
-        var ej = body.ej;
-        var clasif = body.clasif;
         var destino = body.destino;
-        var traslado = body.traslado;
-        var fecha_traslado = body.fecha_traslado;
+        var archivo = body.archivo;
+        var imagen = body.imagen;
         let date = new Date();
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
-          `SELECT password FROM documento_clasificado WHERE id=${id}`,
+          `SELECT password FROM documento_ordinario_personal WHERE id=${id}`,
           function (err, succ) {
             if (err) {
               res.status(500).send({ message: "error en el servidor" });
             }
             if (succ) {
               conexion.all(
-                `UPDATE documento_clasificado SET no="${no}",fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" WHERE id = ${id}`,
+                `UPDATE documento_ordinario_personal SET no="${no}",fecha="${fecha}",procedencia="${procedencia}", asunto="${asunto}", destino="${destino}",
+                 archivo="${archivo}", imagen="${imagen}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
@@ -133,7 +118,7 @@ function updateClasificaod(req, res) {
                       .send({ message: "agregado correctamente" });
                   } else {
                     return res.status(404).send({
-                      message: "no existe ningun documento clasificado con ese id",
+                      message: "no existe ningun documento ordinario con ese id",
                     });
                   }
                 });
@@ -148,7 +133,7 @@ function updateClasificaod(req, res) {
     });
 }
 
-function deleteClasificado(req, res) {
+function deleteOrdinarioPersonal(req, res) {
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.query.token}'`,
     function (err, result) {
@@ -159,11 +144,11 @@ function deleteClasificado(req, res) {
         var id = req.params.id;
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
-          `SELECT * FROM documento_clasificado WHERE id = ${id}`,
+          `SELECT * FROM documento_ordinario_personal WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
               conexion.all(
-                `DELETE FROM documento_clasificado WHERE id = ${id}`,
+                `DELETE FROM documento_ordinario_personal WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
@@ -175,7 +160,7 @@ function deleteClasificado(req, res) {
                   } else {
                     return res
                       .status(404)
-                      .send({ message: "no existe ningun documento clasificado con ese id" });
+                      .send({ message: "no existe ningun documento ordinario personal con ese id" });
                   }
                 }
               );
@@ -188,9 +173,9 @@ function deleteClasificado(req, res) {
 }
 
 module.exports = {
-  saveClasificado,
-  getClasificado,
+  saveOrdinarioPersonal,
+  getOrdinarioPersonal,
   // getUsuario,
-  updateClasificaod,
-  deleteClasificado,
+  updateOrdinarioPersonal,
+  deleteOrdinarioPersonal,
 };
