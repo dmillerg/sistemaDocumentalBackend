@@ -26,36 +26,36 @@ api.delete('/deleteUsuario/:id', usuario_controller.deleteUsuario);
 
 // Rutas para las api de secreto
 api.post('/secreto', secreto_controller.saveSecreto);
-api.get('/secreto', secreto_controller.getSecreto);
-// api.get('/secreto/:id', secreto_controller.getUsuario);
+api.get('/secreto', secreto_controller.getSecretos);
+api.get('/secreto/:id', secreto_controller.getSecreto);
 api.put('/secreto/:id', secreto_controller.updateSecreto);
 api.delete('/secreto/:id', secreto_controller.deleteSecreto);
 
 // Rutas para las api de clasificado
 api.post('/clasificado', clasificado_controller.saveClasificado);
-api.get('/clasificado', clasificado_controller.getClasificado);
-// api.get('/secreto/:id', secreto_controller.getUsuario);
+api.get('/clasificado', clasificado_controller.getClasificados);
+api.get('/clasificado/:id', clasificado_controller.getClasificado);
 api.put('/clasificado/:id', clasificado_controller.updateClasificaod);
 api.delete('/clasificado/:id', clasificado_controller.deleteClasificado);
 
 // Rutas para las api de limitado
 api.post('/limitado', limitado_controller.saveLimitado);
-api.get('/limitado', limitado_controller.getLimitado);
-// api.get('/secreto/:id', secreto_controller.getUsuario);
+api.get('/limitado', limitado_controller.getLimitados);
+api.get('/limitado/:id', limitado_controller.getLimitado);
 api.put('/limitado/:id', limitado_controller.updateLimitado);
 api.delete('/limitado/:id', limitado_controller.deleteLimitado);
 
 // Rutas para las api de ordinario
 api.post('/ordinario', ordinario_controller.saveOrdinario);
-api.get('/ordinario', ordinario_controller.getOrdinario);
-// api.get('/secreto/:id', secreto_controller.getUsuario);
+api.get('/ordinario', ordinario_controller.getOrdinarios);
+api.get('/ordinario/:id', ordinario_controller.getOrdinario);
 api.put('/ordinario/:id', ordinario_controller.updateOrdinario);
 api.delete('/ordinario/:id', ordinario_controller.deleteOrdinario);
 
 // Rutas para las api de ordinario personal
 api.post('/ordinariopersonal', ordinario_personal_controller.saveOrdinarioPersonal);
-api.get('/ordinariopersonal', ordinario_personal_controller.getOrdinarioPersonal);
-// api.get('/secreto/:id', secreto_controller.getUsuario);
+api.get('/ordinariopersonal', ordinario_personal_controller.getOrdinarioPersonals);
+api.get('/ordinariopersonal/:id', ordinario_personal_controller.getOrdinarioPersonal);
 api.put('/ordinariopersonal/:id', ordinario_personal_controller.updateOrdinarioPersonal);
 api.delete('/ordinariopersonal/:id', ordinario_personal_controller.deleteOrdinarioPersonal);
 

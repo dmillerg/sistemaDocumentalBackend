@@ -40,7 +40,7 @@ function saveOrdinarioPersonal(req, res) {
     });
 }
 
-function getOrdinarioPersonal(req, res) {
+function getOrdinarioPersonals(req, res) {
   var limit = req.params.limit;
   var query = `SELECT * FROM documento_ordinario_personal_personal WHERE 1 `;
   if (limit > 0) {
@@ -56,23 +56,23 @@ function getOrdinarioPersonal(req, res) {
   });
 }
 
-// function getUsuario(req, res) {
-//   // Recogemos un parametro por la url
-//   var id = req.params.id;
-//   conexion.all(
-//     `SELECT * FROM usuarios WHERE id = ${id}`,
-//     function (error, results, fields) {
-//       if (error) throw error;
-//       if (results.length > 0) {
-//         return res.status(302).json(results);
-//       } else {
-//         return res
-//           .status(200)
-//           .send({ canal: "no existe ningun usuario con ese id" });
-//       }
-//     }
-//   );
-// }
+function getOrdinarioPersonal(req, res) {
+  // Recogemos un parametro por la url
+  var id = req.params.id;
+  conexion.all(
+    `SELECT * FROM documento_ordinario_personal WHERE id = ${id}`,
+    function (error, results, fields) {
+      if (error) throw error;
+      if (results.length > 0) {
+        return res.status(302).json(results);
+      } else {
+        return res
+          .status(200)
+          .send({ canal: "no existe ningun documento ordinario personal con ese id" });
+      }
+    }
+  );
+}
 
 function updateOrdinarioPersonal(req, res) {
   conexion.all(
@@ -175,7 +175,7 @@ function deleteOrdinarioPersonal(req, res) {
 module.exports = {
   saveOrdinarioPersonal,
   getOrdinarioPersonal,
-  // getUsuario,
+  getOrdinarioPersonals,
   updateOrdinarioPersonal,
   deleteOrdinarioPersonal,
 };

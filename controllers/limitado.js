@@ -45,7 +45,7 @@ function saveLimitado(req, res) {
     });
 }
 
-function getLimitado(req, res) {
+function getLimitados(req, res) {
   var limit = req.params.limit;
   var query = `SELECT * FROM documento_limitado WHERE 1 `;
   if (limit > 0) {
@@ -61,23 +61,23 @@ function getLimitado(req, res) {
   });
 }
 
-// function getUsuario(req, res) {
-//   // Recogemos un parametro por la url
-//   var id = req.params.id;
-//   conexion.all(
-//     `SELECT * FROM usuarios WHERE id = ${id}`,
-//     function (error, results, fields) {
-//       if (error) throw error;
-//       if (results.length > 0) {
-//         return res.status(302).json(results);
-//       } else {
-//         return res
-//           .status(200)
-//           .send({ canal: "no existe ningun usuario con ese id" });
-//       }
-//     }
-//   );
-// }
+function getLimitado(req, res) {
+  // Recogemos un parametro por la url
+  var id = req.params.id;
+  conexion.all(
+    `SELECT * FROM documento_limitado WHERE id = ${id}`,
+    function (error, results, fields) {
+      if (error) throw error;
+      if (results.length > 0) {
+        return res.status(302).json(results);
+      } else {
+        return res
+          .status(200)
+          .send({ canal: "no existe ningun documento limitado con ese id" });
+      }
+    }
+  );
+}
 
 function updateLimitado(req, res) {
   console.log(req.body);
@@ -184,7 +184,7 @@ function deleteLimitado(req, res) {
 module.exports = {
   saveLimitado,
   getLimitado,
-  // getUsuario,
+  getLimitados,
   updateLimitado,
   deleteLimitado,
 };

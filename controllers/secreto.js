@@ -46,7 +46,7 @@ function saveSecreto(req, res) {
     });
 }
 
-function getSecreto(req, res) {
+function getSecretos(req, res) {
   var limit = req.params.limit;
   var query = `SELECT * FROM documento_secreto WHERE 1 `;
   if (limit > 0) {
@@ -62,23 +62,23 @@ function getSecreto(req, res) {
   });
 }
 
-// function getUsuario(req, res) {
-//   // Recogemos un parametro por la url
-//   var id = req.params.id;
-//   conexion.all(
-//     `SELECT * FROM usuarios WHERE id = ${id}`,
-//     function (error, results, fields) {
-//       if (error) throw error;
-//       if (results.length > 0) {
-//         return res.status(302).json(results);
-//       } else {
-//         return res
-//           .status(200)
-//           .send({ canal: "no existe ningun usuario con ese id" });
-//       }
-//     }
-//   );
-// }
+function getSecreto(req, res) {
+  // Recogemos un parametro por la url
+  var id = req.params.id;
+  conexion.all(
+    `SELECT * FROM documento_secreto WHERE id = ${id}`,
+    function (error, results, fields) {
+      if (error) throw error;
+      if (results.length > 0) {
+        return res.status(302).json(results);
+      } else {
+        return res
+          .status(200)
+          .send({ canal: "no existe ningun documento secreto con ese id" });
+      }
+    }
+  );
+}
 
 function updateSecreto(req, res) {
   conexion.all(
@@ -187,7 +187,7 @@ function deleteSecreto(req, res) {
 module.exports = {
   saveSecreto,
   getSecreto,
-  // getUsuario,
+  getSecretos,
   updateSecreto,
   deleteSecreto,
 };

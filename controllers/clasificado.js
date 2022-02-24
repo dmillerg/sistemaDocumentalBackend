@@ -47,7 +47,7 @@ function saveClasificado(req, res) {
     });
 }
 
-function getClasificado(req, res) {
+function getClasificados(req, res) {
   var limit = req.params.limit;
   var query = `SELECT * FROM documento_clasificado WHERE 1 `;
   if (limit > 0) {
@@ -63,23 +63,23 @@ function getClasificado(req, res) {
   });
 }
 
-// function getUsuario(req, res) {
-//   // Recogemos un parametro por la url
-//   var id = req.params.id;
-//   conexion.all(
-//     `SELECT * FROM usuarios WHERE id = ${id}`,
-//     function (error, results, fields) {
-//       if (error) throw error;
-//       if (results.length > 0) {
-//         return res.status(302).json(results);
-//       } else {
-//         return res
-//           .status(200)
-//           .send({ canal: "no existe ningun usuario con ese id" });
-//       }
-//     }
-//   );
-// }
+function getClasificado(req, res) {
+  // Recogemos un parametro por la url
+  var id = req.params.id;
+  conexion.all(
+    `SELECT * FROM documento_clasificado WHERE id = ${id}`,
+    function (error, results, fields) {
+      if (error) throw error;
+      if (results.length > 0) {
+        return res.status(302).json(results);
+      } else {
+        return res
+          .status(200)
+          .send({ canal: "no existe ningun documento clasificado con ese id" });
+      }
+    }
+  );
+}
 
 function updateClasificaod(req, res) {
   console.log(req.body);
@@ -190,7 +190,7 @@ function deleteClasificado(req, res) {
 module.exports = {
   saveClasificado,
   getClasificado,
-  // getUsuario,
+  getClasificados,
   updateClasificaod,
   deleteClasificado,
 };
