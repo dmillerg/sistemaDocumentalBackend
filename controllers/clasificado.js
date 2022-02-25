@@ -28,6 +28,8 @@ function saveClasificado(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
+        console.log(`INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado)
+        VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}")`)
         conexion.all(
           `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado)
          VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}")`,
@@ -92,7 +94,6 @@ function updateClasificaod(req, res) {
         var id = req.params.id;
 
         // Recogemos los datos que nos llegen en el body de la petición
-        var id = -1;
         var body = req.body;
         var no = body.no;
         var fecha = body.fecha;

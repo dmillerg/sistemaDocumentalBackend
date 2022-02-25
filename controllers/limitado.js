@@ -3,10 +3,9 @@ const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 
 function saveLimitado(req, res) {
-  console.log('Datos al agregar limitado', req.body);
-
-  var body = req.body;
+  console.log(req.body);
   var id = -1;
+  var body = req.body;
   var no = body.no;
   var procedencia = body.procedencia;
   var titulo = body.titulo;
@@ -26,11 +25,10 @@ function saveLimitado(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
-        console.log(`INSERT INTO documento_limitado(id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
-        VALUES (NULL,"${no}","${procedencia}","${titulo}","${fecha}","${movimiento1}","${movimiento2}","${destruccion}","${expediente}","${observacion}","${imagen}")`);
+        let query = `INSERT INTO documento_limitado(id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
+        VALUES (NULL,"${no}","${procedencia}","${titulo}","${fecha}","${movimiento1}","${movimiento2}","${destruccion}","${expediente}","${observacion}","${imagen}")`
         conexion.all(
-          `INSERT INTO documento_limitado(id, no, procedencia, enviado, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
-         VALUES (NULL,"${no}","${procedencia}","${titulo}","${fecha}","${movimiento1}","${movimiento2}","${destruccion}","${expediente}","${observacion}","${imagen}")`,
+          query,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
@@ -92,8 +90,8 @@ function updateLimitado(req, res) {
         var id = req.params.id;
 
         // Recogemos los datos que nos llegen en el body de la petición
-        var id = -1;
-        var no = req.no;
+        var body = req.body;
+        var no = body.no;
         var procedencia = body.procedencia;
         var titulo = body.titulo;
         var fecha = body.fecha;
@@ -114,8 +112,8 @@ function updateLimitado(req, res) {
             }
             if (succ) {
               conexion.all(
-                `UPDATE documento_limitado SET no="${no}", procedencia="${procedencia}", titulo="${titulo}", fecha="${fecha}",movimiento1="${movimiento1}", movimiento2="${movimiento2}", rs="${rs}",
-                 destruccion="${destruccion}", expediente="${expediente}", observacion="${observacion}", imagen="${imagen}" WHERE id = ${id}`,
+                `UPDATE documento_limitado SET no="${no}",procedencia="${procedencia}",titulo="${titulo}", fecha="${fecha}", movimiento1="${movimiento1}",
+                 movimiento2="${movimiento2}", destruccion="${destruccion}", expediente="${expediente}", observacion="${observacion}", imagen="${imagen}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
@@ -135,7 +133,7 @@ function updateLimitado(req, res) {
             } else {
               res
                 .status(500)
-                .send({ message: "no hay ningun documento clasificado con ese id" });
+                .send({ message: "no hay ningun documento limitado con ese id" });
             }
           });
       }
@@ -183,8 +181,8 @@ function deleteLimitado(req, res) {
 
 module.exports = {
   saveLimitado,
-  getLimitado,
   getLimitados,
-  updateLimitado,
+  getLimitado,
   deleteLimitado,
+  updateLimitado
 };

@@ -1,8 +1,10 @@
 const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
+const { query } = require("express");
 
 function saveOrdinarioPersonal(req, res) {
+  console.log(req.body);
   var id = -1;
   var body = req.body;
   var no = body.no;
@@ -21,9 +23,11 @@ function saveOrdinarioPersonal(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
+        let query = `INSERT INTO documento_ordinario_personal(id, no, fecha, procedencia, asunto, destino, archivo, imagen)
+        VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen}")`;
+        console.log(query)
         conexion.all(
-          `INSERT INTO documento_ordinario_personal_personal(id, no, fecha, procedencia, asunto, destino, archivo, imagen)
-         VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen}")`,
+          query,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
@@ -42,7 +46,7 @@ function saveOrdinarioPersonal(req, res) {
 
 function getOrdinarioPersonals(req, res) {
   var limit = req.params.limit;
-  var query = `SELECT * FROM documento_ordinario_personal_personal WHERE 1 `;
+  var query = `SELECT * FROM documento_ordinario_personal WHERE 1 `;
   if (limit > 0) {
     query += ` LIMIT ${limit}`;
   }
@@ -73,6 +77,7 @@ function getOrdinarioPersonal(req, res) {
 }
 
 function updateOrdinarioPersonal(req, res) {
+  console.log(req.body);
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
     function (err, result) {
@@ -116,7 +121,7 @@ function updateOrdinarioPersonal(req, res) {
                       .send({ message: "agregado correctamente" });
                   } else {
                     return res.status(404).send({
-                      message: "no existe ningun documento ordinario con ese id",
+                      message: "no existe ningun documento ordinario personal con ese id",
                     });
                   }
                 });
@@ -124,7 +129,7 @@ function updateOrdinarioPersonal(req, res) {
             } else {
               res
                 .status(500)
-                .send({ message: "no hay ningun documento clasificado con ese id" });
+                .send({ message: "no hay ningun documento ordinario personal con ese id" });
             }
           });
       }

@@ -27,9 +27,11 @@ function saveSecreto(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
+        let query = `INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp)
+        VALUES (NULL,"${no}","${lugar}","${reg_no}","${titulo}","${categoria}","${mat_no}","${folio_no}","${cant}","${no_ejemplar}","${cant_hojas}","${destruccion}","${destino}","${comp}")`;
+        console.log(query)
         conexion.all(
-          `INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destrucccion, destino, comp)
-         VALUES (NULL,"${no}","${lugar}","${reg_no}","${titulo}","${categoria}","${mat_no}","${folio_no}","${cant}","${no_ejemplar}","${cant_hojas}","${destruccion}","${destino}","${comp}")`,
+          query,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
