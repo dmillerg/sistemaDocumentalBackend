@@ -11,6 +11,7 @@ var clasificado_controller = require('../controllers/clasificado');
 var ordinario_controller = require('../controllers/ordinario');
 var ordinario_personal_controller = require('../controllers/ordinario_personal');
 var login_controller = require('../controllers/login');
+var manage_controller = require('../database/manageDB')
 
 // var superuser_controller = require('../database/superuser');
 
@@ -58,6 +59,7 @@ api.get('/ordinariopersonal', ordinario_personal_controller.getOrdinarioPersonal
 api.get('/ordinariopersonal/:id', ordinario_personal_controller.getOrdinarioPersonal);
 api.put('/ordinariopersonal/:id', ordinario_personal_controller.updateOrdinarioPersonal);
 api.delete('/ordinariopersonal/:id', ordinario_personal_controller.deleteOrdinarioPersonal);
+api.get('/documentsFoto/:id', manage_controller.getDocumentFoto);
 
 // Rutas para login and logout
 api.post('/login', login_controller.login);

@@ -337,9 +337,37 @@ function loadSQL(req, res) {
   });
 }
 
+function getDocumentFoto(req, res) {
+  try {
+    var id = req.params.id;
+    var dir = req.query.dir;
+    var datatable = req.query.datatable;
+    console.log(id, req.query);
+    conexion.all(
+      `SELECT * FROM ${datatable} WHERE id = ${id}`,
+      function (error, results, fields) {
+        if (error) throw error;
+        if (results.length > 0) {
+          var path = require("path");
+          console.log(results[0].imagen);
+          res.status(200).sendFile(path.resolve(dir + results[0].imagen + '.jpg'));
+        } else {
+          console.log(error, results);
+          return res
+            .status(404)
+            .send({ documento: "no existe ningun documento con ese id" });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   createTables,
   isAuthenticated,
   all,
   loadSQL,
+  getDocumentFoto,
 };

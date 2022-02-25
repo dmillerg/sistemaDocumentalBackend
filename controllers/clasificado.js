@@ -1,6 +1,7 @@
 const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
+var path = require("path");
 
 function saveClasificado(req, res) {
   console.log(req.body);
@@ -20,6 +21,11 @@ function saveClasificado(req, res) {
   var traslado = body.traslado;
   var fecha_traslado = body.fecha_traslado;
   let date = new Date();
+  var foto = { name: null };
+  var foto_name = '';
+  if (req.files) {
+    foto = req.files.foto;
+  }
 
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
@@ -28,14 +34,13 @@ function saveClasificado(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
-        console.log(`INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado)
-        VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}")`)
         conexion.all(
-          `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado)
-         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}")`,
+          `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado, imagen)
+         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}", "${no}")`,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
+              if (req.files) saveFoto(foto, no);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -109,6 +114,12 @@ function updateClasificaod(req, res) {
         var traslado = body.traslado;
         var fecha_traslado = body.fecha_traslado;
         let date = new Date();
+        var foto = { name: null };
+        if (req.files) {
+          foto = req.files.foto;
+          foto_name = titulo.replace(/ /g, "-") + ".jpg";
+          console.log(foto_name);
+        }
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
@@ -184,6 +195,12 @@ function deleteClasificado(req, res) {
       }
     }
   );
+}
+
+function saveFoto(foto, titulo) {
+  if (foto.name != null) {
+    foto.mv(`./public/documents/documentos_clasificados/${titulo.toString()}.jpg`, function (err) { });
+  }
 }
 
 module.exports = {
