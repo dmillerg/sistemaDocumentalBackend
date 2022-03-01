@@ -1,6 +1,7 @@
 const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
+const { deleteFoto } = require("../database/manageDB");
 
 function saveSecreto(req, res) {
   var id = -1;
@@ -19,6 +20,11 @@ function saveSecreto(req, res) {
   var destino = body.destino;
   var comp = body.comp;
   let date = new Date();
+  let imagen_name = no.toString() + '-' + date.getFullYear();
+  var foto_name = '';
+  if (req.files) {
+    foto = req.files.foto;
+  }
 
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
@@ -27,14 +33,15 @@ function saveSecreto(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
-        let query = `INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp)
-        VALUES (NULL,"${no}","${lugar}","${reg_no}","${titulo}","${categoria}","${mat_no}","${folio_no}","${cant}","${no_ejemplar}","${cant_hojas}","${destruccion}","${destino}","${comp}")`;
+        let query = `INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp, imagen)
+        VALUES (NULL,"${no}","${lugar}","${reg_no}","${titulo}","${categoria}","${mat_no}","${folio_no}","${cant}","${no_ejemplar}","${cant_hojas}","${destruccion}","${destino}","${comp}", "${imagen_name}")`;
         console.log(query)
         conexion.all(
           query,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
+              saveFoto(foto, no);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -159,6 +166,7 @@ function deleteSecreto(req, res) {
           `SELECT * FROM documento_secreto WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
+              deleteFoto(result[0].imagen, 'documentos_secretos');
               conexion.all(
                 `DELETE FROM documento_secreto WHERE id = ${id}`,
                 function (error, results, fields) {
@@ -182,6 +190,12 @@ function deleteSecreto(req, res) {
       }
     }
   );
+}
+
+function saveFoto(foto, titulo) {
+  if (foto.name != null) {
+    foto.mv(`./public/documents/documentos_secretos/${titulo.toString()}.jpg`, function (err) { });
+  }
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
+const { deleteFoto } = require("../database/manageDB");
 
 function saveOrdinario(req, res) {
   var id = -1;
@@ -17,6 +18,11 @@ function saveOrdinario(req, res) {
   var traslado = body.traslado;
   var fecha_traslado = body.fecha_traslado;
   let date = new Date();
+  let imagen_name = no.toString() + '-' + date.getFullYear();
+  var foto_name = '';
+  if (req.files) {
+    foto = req.files.foto;
+  }
 
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
@@ -26,11 +32,12 @@ function saveOrdinario(req, res) {
       }
       if (result.length > 0) {
         conexion.all(
-          `INSERT INTO documento_ordinario(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, destino, traslado, fecha_traslado)
-         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}", "${destino}","${traslado}","${fecha_traslado}")`,
+          `INSERT INTO documento_ordinario(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, destino, traslado, fecha_traslado, imagen)
+         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}", "${destino}","${traslado}","${fecha_traslado}", "${imagen_name}")`,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
+              saveFoto(foto, no);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -153,6 +160,7 @@ function deleteOrdinario(req, res) {
           `SELECT * FROM documento_ordinario WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
+              deleteFoto(result[0].imagen, 'documentos_ordinarios');
               conexion.all(
                 `DELETE FROM documento_ordinario WHERE id = ${id}`,
                 function (error, results, fields) {
@@ -176,6 +184,12 @@ function deleteOrdinario(req, res) {
       }
     }
   );
+}
+
+function saveFoto(foto, titulo) {
+  if (foto.name != null) {
+    foto.mv(`./public/documents/documentos_ordinarios/${titulo.toString()}.jpg`, function (err) { });
+  }
 }
 
 module.exports = {

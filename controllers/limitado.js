@@ -1,6 +1,7 @@
 const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
+const { deleteFoto } = require("../database/manageDB");
 
 function saveLimitado(req, res) {
   console.log(req.body);
@@ -17,6 +18,11 @@ function saveLimitado(req, res) {
   var observacion = body.observacion;
   var imagen = body.imagen;
   let date = new Date();
+  let imagen_name = no.toString() + '-' + date.getFullYear();
+  var foto_name = '';
+  if (req.files) {
+    foto = req.files.foto;
+  }
 
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
@@ -25,13 +31,17 @@ function saveLimitado(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
-        let query = `INSERT INTO documento_limitado(id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
-        VALUES (NULL,"${no}","${procedencia}","${titulo}","${fecha}","${movimiento1}","${movimiento2}","${destruccion}","${expediente}","${observacion}","${imagen}")`
+        console.log('limitados');
+        let query = `INSERT INTO documento_limitado (id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
+         VALUES (NULL, '${no}', '${procedencia}', '${titulo}', '${fecha}', '${movimiento1}', '${movimiento2}', '${destruccion}', '${expediente}', '${observacion}', '${imagen_name}')`
+        console.log(query);
         conexion.all(
           query,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
+              console.log('result',results);
+              saveFoto(foto, no);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -47,6 +57,7 @@ function saveLimitado(req, res) {
 
 function getLimitados(req, res) {
   var limit = req.params.limit;
+  console.log('listar limitado')
   var query = `SELECT * FROM documento_limitado WHERE 1 `;
   if (limit > 0) {
     query += ` LIMIT ${limit}`;
@@ -154,6 +165,7 @@ function deleteLimitado(req, res) {
           `SELECT * FROM documento_limitado WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
+              deleteFoto(result[0].imagen, 'documentos_limitados');
               conexion.all(
                 `DELETE FROM documento_limitado WHERE id = ${id}`,
                 function (error, results, fields) {
@@ -177,6 +189,12 @@ function deleteLimitado(req, res) {
       }
     }
   );
+}
+
+function saveFoto(foto, titulo) {
+  if (foto.name != null) {
+    foto.mv(`./public/documents/documentos_limitados/${titulo.toString()}.jpg`, function (err) { });
+  }
 }
 
 module.exports = {

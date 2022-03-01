@@ -2,6 +2,7 @@ const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 var path = require("path");
+const { deleteFoto } = require("../database/manageDB");
 
 function saveClasificado(req, res) {
   console.log(req.body);
@@ -21,6 +22,7 @@ function saveClasificado(req, res) {
   var traslado = body.traslado;
   var fecha_traslado = body.fecha_traslado;
   let date = new Date();
+  let imagen_name = no.toString() + '-' + date.getFullYear();
   var foto = { name: null };
   var foto_name = '';
   if (req.files) {
@@ -36,11 +38,11 @@ function saveClasificado(req, res) {
       if (result.length > 0) {
         conexion.all(
           `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado, imagen)
-         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}", "${no}")`,
+         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}", "${imagen_name}")`,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
-              if (req.files) saveFoto(foto, no);
+              if (req.files) saveFoto(foto, imagen_name);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -172,6 +174,7 @@ function deleteClasificado(req, res) {
           `SELECT * FROM documento_clasificado WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
+              deleteFoto(result[0].imagen, 'documentos_clasificados');
               conexion.all(
                 `DELETE FROM documento_clasificado WHERE id = ${id}`,
                 function (error, results, fields) {

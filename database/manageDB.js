@@ -342,14 +342,12 @@ function getDocumentFoto(req, res) {
     var id = req.params.id;
     var dir = req.query.dir;
     var datatable = req.query.datatable;
-    console.log(id, req.query);
     conexion.all(
       `SELECT * FROM ${datatable} WHERE id = ${id}`,
       function (error, results, fields) {
         if (error) throw error;
         if (results.length > 0) {
           var path = require("path");
-          console.log(results[0].imagen);
           res.status(200).sendFile(path.resolve(dir + results[0].imagen + '.jpg'));
         } else {
           console.log(error, results);
@@ -364,10 +362,22 @@ function getDocumentFoto(req, res) {
   }
 }
 
+function deleteFoto(imagen, dir) {
+  const pathViejo = `./public/documents/${dir$}/${imagen}`;
+  // console.log(pathViejo);
+  const fs = require("fs");
+  if (fs.existsSync(pathViejo)) {
+      console.log("borrado");
+      fs.unlinkSync(pathViejo);
+  }
+  return "borrado correctamente";
+}
+
 module.exports = {
   createTables,
   isAuthenticated,
   all,
   loadSQL,
   getDocumentFoto,
+  deleteFoto,
 };

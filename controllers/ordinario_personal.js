@@ -2,6 +2,7 @@ const conexion = require("../database/database");
 const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 const { query } = require("express");
+const { deleteFoto } = require("../database/manageDB");
 
 function saveOrdinarioPersonal(req, res) {
   console.log(req.body);
@@ -15,6 +16,11 @@ function saveOrdinarioPersonal(req, res) {
   var archivo = body.archivo;
   var imagen = body.imagen;
   let date = new Date();
+  let imagen_name = no.toString() + '-' + date.getFullYear();
+  var foto_name = '';
+  if (req.files) {
+    foto = req.files.foto;
+  }
 
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
@@ -24,13 +30,14 @@ function saveOrdinarioPersonal(req, res) {
       }
       if (result.length > 0) {
         let query = `INSERT INTO documento_ordinario_personal(id, no, fecha, procedencia, asunto, destino, archivo, imagen)
-        VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen}")`;
+        VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen_name}")`;
         console.log(query)
         conexion.all(
           query,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
+              saveFoto(foto, no);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -150,6 +157,7 @@ function deleteOrdinarioPersonal(req, res) {
           `SELECT * FROM documento_ordinario_personal WHERE id = ${id}`,
           function (error, result, fields) {
             if (result) {
+              deleteFoto(result[0].imagen, 'documentos_ordinarios_personales');
               conexion.all(
                 `DELETE FROM documento_ordinario_personal WHERE id = ${id}`,
                 function (error, results, fields) {
@@ -173,6 +181,12 @@ function deleteOrdinarioPersonal(req, res) {
       }
     }
   );
+}
+
+function saveFoto(foto, titulo) {
+  if (foto.name != null) {
+    foto.mv(`./public/documents/documentos_ordinarios_personales/${titulo.toString()}.jpg`, function (err) { });
+  }
 }
 
 module.exports = {

@@ -80,6 +80,7 @@ function getUsuario(req, res) {
 }
 
 function updateUsuario(req, res) {
+  console.log(req.body)
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
     function (err, result) {

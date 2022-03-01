@@ -23,7 +23,7 @@ api.post('/usuarios', usuario_controller.saveUsuario);
 api.get('/usuarios/:limit', usuario_controller.getUsuarios);
 api.get('/usuario/:id', usuario_controller.getUsuario);
 api.put('/usuarios/:id', usuario_controller.updateUsuario);
-api.delete('/deleteUsuario/:id', usuario_controller.deleteUsuario);
+api.delete('/usuarios/:id', usuario_controller.deleteUsuario);
 
 // Rutas para las api de secreto
 api.post('/secreto', secreto_controller.saveSecreto);
