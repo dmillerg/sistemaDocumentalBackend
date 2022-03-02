@@ -363,7 +363,9 @@ function getDocumentFoto(req, res) {
 }
 
 function deleteFoto(imagen, dir) {
-  const pathViejo = `./public/documents/${dir$}/${imagen}`;
+  console.log('Eliminado foto');
+  const pathViejo = `./public/documents/${dir}/${imagen}.jpg`;
+  console.log(pathViejo);
   // console.log(pathViejo);
   const fs = require("fs");
   if (fs.existsSync(pathViejo)) {

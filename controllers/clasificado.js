@@ -24,7 +24,6 @@ function saveClasificado(req, res) {
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
   var foto = { name: null };
-  var foto_name = '';
   if (req.files) {
     foto = req.files.foto;
   }
@@ -89,7 +88,7 @@ function getClasificado(req, res) {
 }
 
 function updateClasificaod(req, res) {
-  console.log(req.body);
+  console.log('update clasificados body->', req.body);
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.body.token}'`,
     function (err, result) {
@@ -116,44 +115,31 @@ function updateClasificaod(req, res) {
         var traslado = body.traslado;
         var fecha_traslado = body.fecha_traslado;
         let date = new Date();
+        let imagen_name = no.toString() + '-' + date.getFullYear();
         var foto = { name: null };
         if (req.files) {
           foto = req.files.foto;
-          foto_name = titulo.replace(/ /g, "-") + ".jpg";
-          console.log(foto_name);
         }
 
-        // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
-        conexion.all(
-          `SELECT password FROM documento_clasificado WHERE id=${id}`,
-          function (err, succ) {
-            if (err) {
-              res.status(500).send({ message: "error en el servidor" });
-            }
-            if (succ) {
-              conexion.all(
-                `UPDATE documento_clasificado SET no="${no}",fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" WHERE id = ${id}`,
-                function (error, results, fields) {
-                  if (error)
-                    return res
-                      .status(500)
-                      .send({ message: "error en el servidor" });
-                  if (results) {
-                    return res
-                      .status(201)
-                      .send({ message: "agregado correctamente" });
-                  } else {
-                    return res.status(404).send({
-                      message: "no existe ningun documento clasificado con ese id",
-                    });
-                  }
-                });
 
-            } else {
-              res
+        conexion.all(
+          `UPDATE documento_clasificado SET fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" WHERE id = ${id}`,
+          function (error, results, fields) {
+            if (error)
+              return res
                 .status(500)
-                .send({ message: "no hay ningun documento clasificado con ese id" });
+                .send({ message: "error en el servidor" });
+            if (results) {
+              deleteFoto(foto, 'documentos_clasificados');
+              saveFoto(foto, imagen_name);
+              return res
+                .status(201)
+                .send({ message: "agregado correctamente" });
+            } else {
+              return res.status(404).send({
+                message: "no existe ningun documento clasificado con ese id",
+              });
             }
           });
       }

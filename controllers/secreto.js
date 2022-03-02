@@ -132,6 +132,8 @@ function updateSecreto(req, res) {
                       .status(500)
                       .send({ message: "error en el servidor" });
                   if (results) {
+                    deleteFoto(foto, 'documentos_secretos');
+                    saveFoto(foto, imagen_name);
                     return res
                       .status(201)
                       .send({ message: "agregado correctamente" });

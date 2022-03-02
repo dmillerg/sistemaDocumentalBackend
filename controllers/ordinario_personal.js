@@ -105,6 +105,11 @@ function updateOrdinarioPersonal(req, res) {
         var archivo = body.archivo;
         var imagen = body.imagen;
         let date = new Date();
+        let imagen_name = no.toString() + '-' + date.getFullYear();
+        var foto = { name: null };
+        if (req.files) {
+          foto = req.files.foto;
+        }
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
@@ -116,13 +121,15 @@ function updateOrdinarioPersonal(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_ordinario_personal SET no="${no}",fecha="${fecha}",procedencia="${procedencia}", asunto="${asunto}", destino="${destino}",
-                 archivo="${archivo}", imagen="${imagen}" WHERE id = ${id}`,
+                 archivo="${archivo}", imagen="${imagen_name}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
                       .status(500)
                       .send({ message: "error en el servidor" });
                   if (results) {
+                    deleteFoto(foto, 'documentos_ordinarios_personales');
+                    saveFoto(foto, imagen_name);
                     return res
                       .status(201)
                       .send({ message: "agregado correctamente" });

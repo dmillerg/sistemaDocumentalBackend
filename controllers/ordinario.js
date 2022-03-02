@@ -126,6 +126,8 @@ function updateOrdinario(req, res) {
                       .status(500)
                       .send({ message: "error en el servidor" });
                   if (results) {
+                    deleteFoto(foto, 'documentos_ordinarios');
+                    saveFoto(foto, imagen_name);
                     return res
                       .status(201)
                       .send({ message: "agregado correctamente" });

@@ -40,8 +40,8 @@ function saveLimitado(req, res) {
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
-              console.log('result',results);
-              saveFoto(foto, no);
+              console.log('result', results);
+              saveFoto(foto, imagen_name);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -113,6 +113,11 @@ function updateLimitado(req, res) {
         var observacion = body.observacion;
         var imagen = body.imagen;
         let date = new Date();
+        let imagen_name = no.toString() + '-' + date.getFullYear();
+        var foto = { name: null };
+        if (req.files) {
+          foto = req.files.foto;
+        }
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
@@ -131,6 +136,8 @@ function updateLimitado(req, res) {
                       .status(500)
                       .send({ message: "error en el servidor" });
                   if (results) {
+                    deleteFoto(foto, 'documentos_limitados');
+                    saveFoto(foto, imagen_name);
                     return res
                       .status(201)
                       .send({ message: "actualizado correctamente" });
