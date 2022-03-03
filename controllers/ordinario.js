@@ -37,7 +37,7 @@ function saveOrdinario(req, res) {
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
-              saveFoto(foto, no);
+              saveFoto(foto, imagen_name);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -93,9 +93,7 @@ function updateOrdinario(req, res) {
       if (result.length > 0) {
         // Recogemos un parámetro por la url
         var id = req.params.id;
-
         // Recogemos los datos que nos llegen en el body de la petición
-        var id = -1;
         var body = req.body;
         var no = body.no;
         var fecha = body.fecha;
@@ -108,38 +106,43 @@ function updateOrdinario(req, res) {
         var traslado = body.traslado;
         var fecha_traslado = body.fecha_traslado;
         let date = new Date();
+        let imagen_name = no.toString() + '-' + date.getFullYear();
+        var foto = { name: null };
+        if (req.files) {
+          foto = req.files.foto;
+        }
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
-          `SELECT password FROM documento_ordinario WHERE id=${id}`,
+          `SELECT * FROM documento_ordinario WHERE id=${id}`,
           function (err, succ) {
             if (err) {
-              res.status(500).send({ message: "error en el servidor" });
+              return res.status(500).send({ message: "error en el servidor" +err});
             }
             if (succ) {
               conexion.all(
                 `UPDATE documento_ordinario SET no="${no}",fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" WHERE id = ${id}`,
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" imagen=${imagen_name} WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
-                    return res
-                      .status(500)
-                      .send({ message: "error en el servidor" });
-                  if (results) {
-                    deleteFoto(foto, 'documentos_ordinarios');
-                    saveFoto(foto, imagen_name);
-                    return res
-                      .status(201)
-                      .send({ message: "agregado correctamente" });
-                  } else {
-                    return res.status(404).send({
-                      message: "no existe ningun documento ordinario con ese id",
-                    });
-                  }
+                  return res
+                    .status(500)
+                    .send({ message: "error en el servidor "+ error });
+                if (results) {
+                  deleteFoto(foto, 'documentos_ordinarios');
+                  saveFoto(foto, imagen_name);
+                  return res
+                    .status(201)
+                    .send({ message: "agregado correctamente" });
+                } else {
+                  return res.status(404).send({
+                    message: "no existe ningun documento ordinario con ese id",
+                  });
+                }
                 });
 
             } else {
-              res
+              return res
                 .status(500)
                 .send({ message: "no hay ningun documento clasificado con ese id" });
             }

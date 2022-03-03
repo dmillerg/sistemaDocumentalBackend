@@ -124,12 +124,12 @@ function updateLimitado(req, res) {
           `SELECT password FROM documento_limitado WHERE id=${id}`,
           function (err, succ) {
             if (err) {
-              res.status(500).send({ message: "error en el servidor" });
+              return res.status(500).send({ message: "error en el servidor" });
             }
             if (succ) {
               conexion.all(
                 `UPDATE documento_limitado SET no="${no}",procedencia="${procedencia}",titulo="${titulo}", fecha="${fecha}", movimiento1="${movimiento1}",
-                 movimiento2="${movimiento2}", destruccion="${destruccion}", expediente="${expediente}", observacion="${observacion}", imagen="${imagen}" WHERE id = ${id}`,
+                 movimiento2="${movimiento2}", destruccion="${destruccion}", expediente="${expediente}", observacion="${observacion}", imagen="${imagen_name}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
@@ -149,7 +149,7 @@ function updateLimitado(req, res) {
                 });
 
             } else {
-              res
+              return res
                 .status(500)
                 .send({ message: "no hay ningun documento limitado con ese id" });
             }

@@ -124,12 +124,12 @@ function updateClasificaod(req, res) {
 
         conexion.all(
           `UPDATE documento_clasificado SET fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" WHERE id = ${id}`,
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" imagen="${imagen_name}" WHERE id = ${id}`,
           function (error, results, fields) {
             if (error)
               return res
                 .status(500)
-                .send({ message: "error en el servidor" });
+                .send({ message: "error en el servidor "+ error });
             if (results) {
               deleteFoto(foto, 'documentos_clasificados');
               saveFoto(foto, imagen_name);

@@ -114,18 +114,24 @@ function updateSecreto(req, res) {
         var destruccion = body.destruccion;
         var destino = body.destino;
         var comp = body.comp;
+        let date = new Date();
+        let imagen_name = no.toString() + '-' + date.getFullYear();
+        var foto_name = '';
+        if (req.files) {
+          foto = req.files.foto;
+        }
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
           `SELECT password FROM documento_secreto WHERE id=${id}`,
           function (err, succ) {
             if (err) {
-              res.status(500).send({ message: "error en el servidor" });
+             return  res.status(500).send({ message: "error en el servidor" });
             }
             if (succ) {
               conexion.all(
                 `UPDATE documento_secreto SET no="${no}",lugar="${lugar}",reg_no="${reg_no}", titulo="${titulo}", categoria="${categoria}",
-                 mat_no="${mat_no}", folio_no="${folio_no}", cant="${cant}", no_ejemplar="${no_ejemplar}", cant_hojas="${cant_hojas}", destruccion="${destruccion}", destino="${destino}", comp="${comp}" WHERE id = ${id}`,
+                 mat_no="${mat_no}", folio_no="${folio_no}", cant="${cant}", no_ejemplar="${no_ejemplar}", cant_hojas="${cant_hojas}", destruccion="${destruccion}", destino="${destino}", comp="${comp}" imagen="${imagen_name}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
@@ -145,7 +151,7 @@ function updateSecreto(req, res) {
                 });
 
             } else {
-              res
+             return res
                 .status(500)
                 .send({ message: "no hay ningun documento secreto con ese id" });
             }

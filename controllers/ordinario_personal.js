@@ -116,7 +116,7 @@ function updateOrdinarioPersonal(req, res) {
           `SELECT password FROM documento_ordinario_personal WHERE id=${id}`,
           function (err, succ) {
             if (err) {
-              res.status(500).send({ message: "error en el servidor" });
+              return res.status(500).send({ message: "error en el servidor" });
             }
             if (succ) {
               conexion.all(
@@ -141,7 +141,7 @@ function updateOrdinarioPersonal(req, res) {
                 });
 
             } else {
-              res
+              return res
                 .status(500)
                 .send({ message: "no hay ningun documento ordinario personal con ese id" });
             }
