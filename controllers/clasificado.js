@@ -123,8 +123,8 @@ function updateClasificaod(req, res) {
 
 
         conexion.all(
-          `UPDATE documento_clasificado SET fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" imagen="${imagen_name}" WHERE id = ${id}`,
+          `UPDATE documento_clasificado SET no="${no}", enviado="${enviado}", rsb="${rsb}", rs="${rs}",
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}", imagen="${imagen_name}" WHERE id = ${id}`,
           function (error, results, fields) {
             if (error)
               return res
@@ -159,6 +159,7 @@ function deleteClasificado(req, res) {
         conexion.all(
           `SELECT * FROM documento_clasificado WHERE id = ${id}`,
           function (error, result, fields) {
+            console.log(result);
             if (result) {
               deleteFoto(result[0].imagen, 'documentos_clasificados');
               conexion.all(

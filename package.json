@@ -1,5 +1,5 @@
 {
-  "name": "icem-back",
+  "name": "ctc-back",
   "version": "1.0.0",
   "description": "Servidor Icem",
   "main": "server.js",

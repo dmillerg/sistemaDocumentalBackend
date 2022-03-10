@@ -20,6 +20,8 @@ function saveLimitado(req, res) {
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
   var foto_name = '';
+  var foto = { name: null };
+
   if (req.files) {
     foto = req.files.foto;
   }
@@ -121,7 +123,7 @@ function updateLimitado(req, res) {
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
-          `SELECT password FROM documento_limitado WHERE id=${id}`,
+          `SELECT * FROM documento_limitado WHERE id=${id}`,
           function (err, succ) {
             if (err) {
               return res.status(500).send({ message: "error en el servidor" });

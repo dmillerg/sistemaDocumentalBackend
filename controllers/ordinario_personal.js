@@ -37,7 +37,7 @@ function saveOrdinarioPersonal(req, res) {
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
-              saveFoto(foto, no);
+              saveFoto(foto, imagen_name);
               return res
                 .status(201)
                 .send({ message: "agregado correctamente" });
@@ -113,7 +113,7 @@ function updateOrdinarioPersonal(req, res) {
 
         // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
         conexion.all(
-          `SELECT password FROM documento_ordinario_personal WHERE id=${id}`,
+          `SELECT * FROM documento_ordinario_personal WHERE id=${id}`,
           function (err, succ) {
             if (err) {
               return res.status(500).send({ message: "error en el servidor" });
