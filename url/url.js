@@ -11,6 +11,7 @@ var clasificado_controller = require('../controllers/clasificado');
 var ordinario_controller = require('../controllers/ordinario');
 var ordinario_personal_controller = require('../controllers/ordinario_personal');
 var login_controller = require('../controllers/login');
+var document_controller = require('../controllers/documents');
 var manage_controller = require('../database/manageDB')
 
 // var superuser_controller = require('../database/superuser');
@@ -64,6 +65,9 @@ api.get('/documentsFoto/:id', manage_controller.getDocumentFoto);
 // Rutas para login and logout
 api.post('/login', login_controller.login);
 api.post('/logout', login_controller.logout);
+
+// Rutas para los documentos
+api.get('/documents',document_controller.getDocument);
 
 // Exportamos la configuración
 module.exports = api;

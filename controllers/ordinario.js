@@ -122,7 +122,7 @@ function updateOrdinario(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_ordinario SET no="${no}",fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}" imagen=${imagen_name} WHERE id = ${id}`,
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}", imagen=${imagen_name} WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                   return res

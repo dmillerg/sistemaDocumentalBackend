@@ -131,12 +131,12 @@ function updateSecreto(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_secreto SET no="${no}",lugar="${lugar}",reg_no="${reg_no}", titulo="${titulo}", categoria="${categoria}",
-                 mat_no="${mat_no}", folio_no="${folio_no}", cant="${cant}", no_ejemplar="${no_ejemplar}", cant_hojas="${cant_hojas}", destruccion="${destruccion}", destino="${destino}", comp="${comp}" imagen="${imagen_name}" WHERE id = ${id}`,
+                 mat_no="${mat_no}", folio_no="${folio_no}", cant="${cant}", no_ejemplar="${no_ejemplar}", cant_hojas="${cant_hojas}", destruccion="${destruccion}", destino="${destino}", comp="${comp}", imagen="${imagen_name}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
                       .status(500)
-                      .send({ message: "error en el servidor" });
+                      .send({ message: "error en el servidor", error });
                   if (results) {
                     deleteFoto(foto, 'documentos_secretos');
                     saveFoto(foto, imagen_name);

@@ -157,14 +157,20 @@ function deleteUsuario(req, res) {
         conexion.all(
           `SELECT * FROM usuarios WHERE id = ${id}`,
           function (error, result, fields) {
+            if (error) {
+              return res
+                .status(500)
+                .send({ message: "error en el servidor", error: error });
+            }
             if (result) {
+              console.log(`DELETE FROM usuarios WHERE id = ${id}`);
               conexion.all(
                 `DELETE FROM usuarios WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res
                       .status(500)
-                      .send({ message: "error en el servidor" });
+                      .send({ message: "error en el servidor", error: error });
                   if (results) {
                     // conexion.all(`DELETE FROM tokens WHERE usuario_id=${id}`);
                     return res.status(200).json(results);
