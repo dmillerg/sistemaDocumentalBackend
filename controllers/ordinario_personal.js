@@ -5,7 +5,7 @@ const { query } = require("express");
 const { deleteFoto } = require("../database/manageDB");
 
 function saveOrdinarioPersonal(req, res) {
-  console.log(req.body);
+  console.log(req.body, 'documento ordinario_personal');
   var id = -1;
   var body = req.body;
   var no = body.no;
@@ -14,7 +14,6 @@ function saveOrdinarioPersonal(req, res) {
   var asunto = body.asunto;
   var destino = body.destino;
   var archivo = body.archivo;
-  var imagen = body.imagen;
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
   var foto_name = '';
@@ -151,6 +150,7 @@ function updateOrdinarioPersonal(req, res) {
 }
 
 function deleteOrdinarioPersonal(req, res) {
+  console.log(req.query)
   conexion.all(
     `SELECT * FROM tokens WHERE token='${req.query.token}'`,
     function (err, result) {
