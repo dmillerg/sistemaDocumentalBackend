@@ -192,7 +192,7 @@ function deleteOrdinarioPersonal(req, res) {
 
 function saveFoto(foto, titulo) {
   if (foto.name != null) {
-    foto.mv(`./public/documents/documentos_ordinarios_personales/${titulo.toString()}.jpg`, function (err) { });
+    foto.mv(`./public/documents/documentos_ordinarios_personales/${titulo.toString()}.pdf`, function (err) { });
   }
 }
 

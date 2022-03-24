@@ -202,7 +202,7 @@ function deleteSecreto(req, res) {
 
 function saveFoto(foto, titulo) {
   if (foto.name != null) {
-    foto.mv(`./public/documents/documentos_secretos/${titulo.toString()}.jpg`, function (err) { });
+    foto.mv(`./public/documents/documentos_secretos/${titulo.toString()}.pdf`, function (err) { });
   }
 }
 

@@ -189,7 +189,7 @@ function deleteClasificado(req, res) {
 
 function saveFoto(foto, titulo) {
   if (foto.name != null) {
-    foto.mv(`./public/documents/documentos_clasificados/${titulo.toString()}.jpg`, function (err) { });
+    foto.mv(`./public/documents/documentos_clasificados/${titulo.toString()}.pdf`, function (err) { });
   }
 }
 

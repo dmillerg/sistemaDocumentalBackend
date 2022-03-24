@@ -348,7 +348,7 @@ function getDocumentFoto(req, res) {
         if (error) throw error;
         if (results.length > 0) {
           var path = require("path");
-          res.status(200).sendFile(path.resolve(dir + results[0].imagen + '.jpg'));
+          res.status(200).sendFile(path.resolve(dir + results[0].imagen + '.pdf'));
         } else {
           console.log(error, results);
           return res

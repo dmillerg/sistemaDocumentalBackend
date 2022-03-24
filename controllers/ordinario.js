@@ -193,7 +193,7 @@ function deleteOrdinario(req, res) {
 
 function saveFoto(foto, titulo) {
   if (foto.name != null) {
-    foto.mv(`./public/documents/documentos_ordinarios/${titulo.toString()}.jpg`, function (err) { });
+    foto.mv(`./public/documents/documentos_ordinarios/${titulo.toString()}.pdf`, function (err) { });
   }
 }
 
