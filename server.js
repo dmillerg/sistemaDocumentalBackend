@@ -5,6 +5,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const exec = require('child_process');
 
 const app = express();
 const port = 9706;
@@ -28,8 +29,6 @@ app.use('/apis', routes);
 app.get('/apis', inicio.getApis);
 
 module.exports = app;
-
-
 
 // Server port
 var HTTP_PORT = 9706

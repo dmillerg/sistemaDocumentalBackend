@@ -16,6 +16,7 @@ function saveOrdinario(req, res) {
   var asunto = body.asunto;
   var destino = body.destino;
   var traslado = body.traslado;
+  var tipo = body.tipo;
   var fecha_traslado = body.fecha_traslado;
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
@@ -32,8 +33,8 @@ function saveOrdinario(req, res) {
       }
       if (result.length > 0) {
         conexion.all(
-          `INSERT INTO documento_ordinario(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, destino, traslado, fecha_traslado, imagen)
-         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}", "${destino}","${traslado}","${fecha_traslado}", "${imagen_name}")`,
+          `INSERT INTO documento_ordinario(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, destino, traslado, fecha_traslado, imagen, tipo)
+         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}", "${destino}","${traslado}","${fecha_traslado}", "${imagen_name}", "${tipo}")`,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
@@ -104,6 +105,7 @@ function updateOrdinario(req, res) {
         var asunto = body.asunto;
         var destino = body.destino;
         var traslado = body.traslado;
+        var tipo = body.tipo;
         var fecha_traslado = body.fecha_traslado;
         let date = new Date();
         let imagen_name = no.toString() + '-' + date.getFullYear();
@@ -122,7 +124,7 @@ function updateOrdinario(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_ordinario SET no="${no}",fecha="${fecha}",enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}", imagen=${imagen_name} WHERE id = ${id}`,
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}", imagen="${imagen_name}", tipo="${tipo}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                   return res

@@ -61,6 +61,9 @@ api.get('/ordinariopersonal/:id', ordinario_personal_controller.getOrdinarioPers
 api.put('/ordinariopersonal/:id', ordinario_personal_controller.updateOrdinarioPersonal);
 api.delete('/ordinariopersonal/:id', ordinario_personal_controller.deleteOrdinarioPersonal);
 api.get('/documentsFoto/:id', manage_controller.getDocumentFoto);
+api.get('/scan', manage_controller.Scan);
+api.get('/openpdf/:id', manage_controller.openPDF);
+api.get('/lastnumber', manage_controller.getLastNumberDocument);
 
 // Rutas para login and logout
 api.post('/login', login_controller.login);

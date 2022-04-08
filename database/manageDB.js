@@ -369,10 +369,64 @@ function deleteFoto(imagen, dir) {
   // console.log(pathViejo);
   const fs = require("fs");
   if (fs.existsSync(pathViejo)) {
-      console.log("borrado");
-      fs.unlinkSync(pathViejo);
+    console.log("borrado");
+    fs.unlinkSync(pathViejo);
   }
   return "borrado correctamente";
+}
+
+function Scan(req, res) {
+  const exec = require('child_process');
+  exec.exec('wfs');
+  return res.status(200).send({ 'message': 'OK' });
+}
+
+function openPDF(req, res) {
+  console.log('sasas', req.query);
+  const exec = require('child_process');
+  const path = require('path');
+  try {
+    var id = req.params.id;
+    var dir = req.query.dir;
+    var datatable = req.query.datatable;
+    conexion.all(
+      `SELECT * FROM ${datatable} WHERE id = ${id}`,
+      function (error, results, fields) {
+        if (error) throw error;
+        if (results.length > 0) {
+          exec.exec(path.resolve(dir + results[0].imagen + '.pdf'));
+          return res.status(200).send({ message: 'OK' });
+        } else {
+          console.log(error, results);
+          return res
+            .status(404)
+            .send({ documento: "no existe ningun documento con ese id" });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function getLastNumberDocument(req, res) {
+  let tipo = req.query.tipo;
+  let date = new Date();
+  let year = date.getFullYear();
+  let query = `SELECT no FROM ${tipo} WHERE fecha>='${year}-01-01' AND fecha<='${year}-12-31' ORDER BY no DESC LIMIT 1`;
+  conexion.all(query, function (err, resul, field) {
+    console.log(resul, 'asdasd');
+    if (resul == undefined) {
+      return res.status(200).send('-1');
+    } else if (resul.length > 0) {
+      return res.status(200).send(resul[0].no);
+    } else if( resul.length==0){
+      return res.status(200).send('-1');
+    }
+    if (err) {
+      return res.status(500).send({ message: 'ERROR', error: err });
+    }
+  })
 }
 
 module.exports = {
@@ -382,4 +436,7 @@ module.exports = {
   loadSQL,
   getDocumentFoto,
   deleteFoto,
+  Scan,
+  openPDF,
+  getLastNumberDocument,
 };

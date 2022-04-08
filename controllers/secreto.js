@@ -18,6 +18,7 @@ function saveSecreto(req, res) {
   var cant_hojas = body.cant_hojas;
   var destruccion = body.destruccion;
   var destino = body.destino;
+  var tipo = body.tipo;
   var comp = body.comp;
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
@@ -33,8 +34,8 @@ function saveSecreto(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
-        let query = `INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp, imagen)
-        VALUES (NULL,"${no}","${lugar}","${reg_no}","${titulo}","${categoria}","${mat_no}","${folio_no}","${cant}","${no_ejemplar}","${cant_hojas}","${destruccion}","${destino}","${comp}", "${imagen_name}")`;
+        let query = `INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp, imagen, tipo)
+        VALUES (NULL,"${no}","${lugar}","${reg_no}","${titulo}","${categoria}","${mat_no}","${folio_no}","${cant}","${no_ejemplar}","${cant_hojas}","${destruccion}","${destino}","${comp}", "${imagen_name}", "${tipo}")`;
         console.log(query)
         conexion.all(
           query,
@@ -112,6 +113,7 @@ function updateSecreto(req, res) {
         var no_ejemplar = body.no_ejemplar;
         var cant_hojas = body.cant_hojas;
         var destruccion = body.destruccion;
+        var tipo = body.tipo;
         var destino = body.destino;
         var comp = body.comp;
         let date = new Date();
@@ -131,7 +133,7 @@ function updateSecreto(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_secreto SET no="${no}",lugar="${lugar}",reg_no="${reg_no}", titulo="${titulo}", categoria="${categoria}",
-                 mat_no="${mat_no}", folio_no="${folio_no}", cant="${cant}", no_ejemplar="${no_ejemplar}", cant_hojas="${cant_hojas}", destruccion="${destruccion}", destino="${destino}", comp="${comp}", imagen="${imagen_name}" WHERE id = ${id}`,
+                 mat_no="${mat_no}", folio_no="${folio_no}", cant="${cant}", no_ejemplar="${no_ejemplar}", cant_hojas="${cant_hojas}", destruccion="${destruccion}", destino="${destino}", comp="${comp}", imagen="${imagen_name}", tipo="${tipo}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res

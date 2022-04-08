@@ -16,6 +16,7 @@ function saveLimitado(req, res) {
   var destruccion = body.destruccion;
   var expediente = body.expediente;
   var observacion = body.observacion;
+  var tipo = body.tipo;
   var imagen = body.imagen;
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
@@ -34,8 +35,8 @@ function saveLimitado(req, res) {
       }
       if (result.length > 0) {
         console.log('limitados');
-        let query = `INSERT INTO documento_limitado (id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen)
-         VALUES (NULL, '${no}', '${procedencia}', '${titulo}', '${fecha}', '${movimiento1}', '${movimiento2}', '${destruccion}', '${expediente}', '${observacion}', '${imagen_name}')`
+        let query = `INSERT INTO documento_limitado (id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen, tipo)
+         VALUES (NULL, '${no}', '${procedencia}', '${titulo}', '${fecha}', '${movimiento1}', '${movimiento2}', '${destruccion}', '${expediente}', '${observacion}', '${imagen_name}', '${tipo}')`
         console.log(query);
         conexion.all(
           query,
@@ -113,6 +114,7 @@ function updateLimitado(req, res) {
         var destruccion = body.destruccion;
         var expediente = body.expediente;
         var observacion = body.observacion;
+        var tipo = body.tipo;
         var imagen = body.imagen;
         let date = new Date();
         let imagen_name = no.toString() + '-' + date.getFullYear();
@@ -131,7 +133,7 @@ function updateLimitado(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_limitado SET no="${no}",procedencia="${procedencia}",titulo="${titulo}", fecha="${fecha}", movimiento1="${movimiento1}",
-                 movimiento2="${movimiento2}", destruccion="${destruccion}", expediente="${expediente}", observacion="${observacion}", imagen="${imagen_name}" WHERE id = ${id}`,
+                 movimiento2="${movimiento2}", destruccion="${destruccion}", expediente="${expediente}", observacion="${observacion}", imagen="${imagen_name}", tipo="${tipo}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res

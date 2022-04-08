@@ -14,6 +14,7 @@ function saveOrdinarioPersonal(req, res) {
   var asunto = body.asunto;
   var destino = body.destino;
   var archivo = body.archivo;
+  var tipo = body.tipo;
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
   var foto_name = '';
@@ -28,8 +29,8 @@ function saveOrdinarioPersonal(req, res) {
         return res.status(405).send({ message: "usuario no autenticado" });
       }
       if (result.length > 0) {
-        let query = `INSERT INTO documento_ordinario_personal(id, no, fecha, procedencia, asunto, destino, archivo, imagen)
-        VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen_name}")`;
+        let query = `INSERT INTO documento_ordinario_personal(id, no, fecha, procedencia, asunto, destino, archivo, imagen, tipo)
+        VALUES (NULL,"${no}","${fecha}","${procedencia}","${asunto}","${destino}","${archivo}","${imagen_name}", "${tipo}")`;
         console.log(query)
         conexion.all(
           query,
@@ -103,6 +104,7 @@ function updateOrdinarioPersonal(req, res) {
         var destino = body.destino;
         var archivo = body.archivo;
         var imagen = body.imagen;
+        var tipo = body.tipo;
         let date = new Date();
         let imagen_name = no.toString() + '-' + date.getFullYear();
         var foto = { name: null };
@@ -120,7 +122,7 @@ function updateOrdinarioPersonal(req, res) {
             if (succ) {
               conexion.all(
                 `UPDATE documento_ordinario_personal SET no="${no}",fecha="${fecha}",procedencia="${procedencia}", asunto="${asunto}", destino="${destino}",
-                 archivo="${archivo}", imagen="${imagen_name}" WHERE id = ${id}`,
+                 archivo="${archivo}", imagen="${imagen_name}", tipo="${tipo}" WHERE id = ${id}`,
                 function (error, results, fields) {
                   if (error)
                     return res

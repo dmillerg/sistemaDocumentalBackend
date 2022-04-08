@@ -20,6 +20,7 @@ function saveClasificado(req, res) {
   var clasif = body.clasif;
   var destino = body.destino;
   var traslado = body.traslado;
+  var tipo = body.tipo;
   var fecha_traslado = body.fecha_traslado;
   let date = new Date();
   let imagen_name = no.toString() + '-' + date.getFullYear();
@@ -36,8 +37,8 @@ function saveClasificado(req, res) {
       }
       if (result.length > 0) {
         conexion.all(
-          `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado, imagen)
-         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}", "${imagen_name}")`,
+          `INSERT INTO documento_clasificado(id, no, fecha, enviado, rsb, rs, fecha_registro_ctc, asunto, doc, ej, clasif, destino, traslado, fecha_traslado, imagen, tipo)
+         VALUES (NULL,"${no}","${fecha}","${enviado}","${rsb}","${rs}","${fecha_registro_ctc}","${asunto}","${doc}","${ej}","${clasif}", "${destino}","${traslado}","${fecha_traslado}", "${imagen_name}", "${tipo}")`,
           function (error, results, fields) {
             if (error) return res.status(500).send({ message: error });
             if (results) {
@@ -114,6 +115,7 @@ function updateClasificaod(req, res) {
         var destino = body.destino;
         var traslado = body.traslado;
         var fecha_traslado = body.fecha_traslado;
+        var tipo = body.tipo;
         let date = new Date();
         let imagen_name = no.toString() + '-' + date.getFullYear();
         var foto = { name: null };
@@ -124,7 +126,7 @@ function updateClasificaod(req, res) {
 
         conexion.all(
           `UPDATE documento_clasificado SET no="${no}", enviado="${enviado}", rsb="${rsb}", rs="${rs}",
-                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}", imagen="${imagen_name}" WHERE id = ${id}`,
+                 fecha_registro_ctc="${fecha_registro_ctc}", asunto="${asunto}", doc="${doc}", ej="${ej}", clasif="${clasif}", destino="${destino}", traslado="${traslado}", fecha_traslado="${fecha_traslado}", imagen="${imagen_name}", tipo="${tipo} WHERE id = ${id}`,
           function (error, results, fields) {
             if (error)
               return res

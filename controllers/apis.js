@@ -51,13 +51,14 @@ function getApis(req, res) {
             document.getElementById('${idIn}').click();
         });
         </script>`
-        } else
+        } else {
             var arg = element.route.path.substring(element.route.path.indexOf(':') + 1, element.route.path.length);
-        var ruta = element.route.path;
-        var idform = ruta.split('/')[1] + 'form';
-        var idIn = ruta.split('/')[1] + 'in';
-        var idbtn = ruta.split('/')[1] + 'btn';
-        item += `<form id="${idform}" action="apis/${ruta}" method="${method}">
+            var ruta = element.route.path;
+            var idform = ruta.split('/')[1] + 'form';
+            var idIn = ruta.split('/')[1] + 'in';
+            var idbtn = ruta.split('/')[1] + 'btn';
+            console.log(idbtn, "idbtn");
+            item += `<form id="${idform}" action="apis/${ruta}" method="${method}">
         <div class="form-in"><label>Metodo: ${method}</label></div>
         <div class="form-in"><a href="${element.route.path}" disabled>Url: ${element.route.path}</a></div>
         <div class="form-in"><textarea type="text" id="${idIn}" name="" placeholder="${arg}..." rows="1" disabled></textarea></div>
@@ -68,7 +69,7 @@ function getApis(req, res) {
         document.getElementById('${idform}').action ='apis/'+ ${ruta};
         document.getElementById('${idform}').submit();
     });
-    </script>`
+    </script>`}
     });
     const resp = `
     <style type="text/css">
@@ -155,6 +156,22 @@ function getApis(req, res) {
         color: rgb(210,210,210);
         transition: all 0.3s;
     }
+
+    .footer-version{
+        width: 94%;
+        margin-left: 3%;
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 136, 255, 0.363);
+        color: white;
+        z-index: 999;
+        font-family: Arial, Helvetica, sans-serif;
+        text-shadow: 2px 2px 6px #000000;
+    }
   </style>
   <div class="example-loading-shade">
   <div class="container" style="text-align: center; color: white;font-family: Arial, Helvetica, sans-serif;">
@@ -168,6 +185,7 @@ function getApis(req, res) {
     </div>
     </div>
     </div>
+    <div class="footer-version">© Copyright 2022 version de backend 2.0.2</div>
    `
     return res.status(200).send(resp);
 }
