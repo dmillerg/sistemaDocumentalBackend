@@ -64,6 +64,7 @@ api.get('/documentsFoto/:id', manage_controller.getDocumentFoto);
 api.get('/scan', manage_controller.Scan);
 api.get('/openpdf/:id', manage_controller.openPDF);
 api.get('/lastnumber', manage_controller.getLastNumberDocument);
+api.post('/reporte', manage_controller.createReporte);
 
 // Rutas para login and logout
 api.post('/login', login_controller.login);

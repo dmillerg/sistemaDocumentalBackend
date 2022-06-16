@@ -414,19 +414,54 @@ function getLastNumberDocument(req, res) {
   let date = new Date();
   let year = date.getFullYear();
   let query = `SELECT no FROM ${tipo} WHERE fecha>='${year}-01-01' AND fecha<='${year}-12-31' ORDER BY no DESC LIMIT 1`;
+  console.log(query);
   conexion.all(query, function (err, resul, field) {
     console.log(resul, 'asdasd');
     if (resul == undefined) {
       return res.status(200).send('-1');
     } else if (resul.length > 0) {
       return res.status(200).send(resul[0].no);
-    } else if( resul.length==0){
+    } else if (resul.length == 0) {
       return res.status(200).send('-1');
     }
     if (err) {
       return res.status(500).send({ message: 'ERROR', error: err });
     }
   })
+}
+
+function createReporte(req, res) {
+  var excelJS = require('exceljs');
+  var path = require('path');
+  let reportes =req.body.reportes;
+  let name = 'reportes'
+  console.log(reportes);
+  const workbook = new excelJS.Workbook();  // Create a new workbook 
+  const worksheet = workbook.addWorksheet("Reportes Documentos"); // New Worksheet 
+  const paths = "./public";  // Path to download excel  // Column for data in excel. key must match data key
+  worksheet.columns = [
+    { header: "NO", key: "no", width: 10 },
+    { header: "FECHA", key: "fecha", width: 10 },
+    { header: "TIPO", key: "tipoe", width: 10 },
+    { header: "CLASIFICACIÓN", key: "clasificacion", width: 10 },
+    { header: "ORIGEN", key: "origen", width: 10 },
+    { header: "TÍTULO O ASUNTO", key: "tema", width: 10 },
+  ];// Looping through User data
+  worksheet.getRow(1).eachCell((cell) => { cell.font = { bold: true }; });
+
+  reportes.forEach((reporte) => {
+    reporte.origen = reporte.procedencia==undefined?reporte.enviado:reporte.procedencia
+    reporte.tema = reporte.titulo==undefined?reporte.asunto:reporte.titulo;
+    reporte.clasificacion = reporte.tipo_doc.name;
+    reporte.tipoe = reporte.tipo==0?'emitido':'recibido';
+    worksheet.addRow(reporte); // Add data in worksheet  counter++;});// Making first line in excel bold
+    const data = workbook.xlsx.writeFile(`${paths}/${name + '.xlsx'}`).then(() => {
+      // return res.sendFile(path.resolve(`${paths}/ventas.xlsx`))
+      res.download(path.resolve(`${paths}/${name + '.xlsx'}`), name + '');
+
+      return res;
+    })
+  });
 }
 
 module.exports = {
@@ -439,4 +474,5 @@ module.exports = {
   Scan,
   openPDF,
   getLastNumberDocument,
+  createReporte,
 };
